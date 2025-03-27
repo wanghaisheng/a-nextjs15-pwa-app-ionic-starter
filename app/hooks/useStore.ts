@@ -1,6 +1,10 @@
 import { create } from 'zustand'
 import { lists, homeItems, notifications } from '@/app/mock/data';
-import { ListItem,Notification ,HomeItem, Item} from '../types/type';
+import { ListItem, Notification, HomeItem, Item } from '../types/type';
+import { DataService } from '@/app/services/data';
+
+// 创建一个全局数据服务实例
+let dataServiceInstance: DataService | null = null;
 
 
 
@@ -60,6 +64,45 @@ const useAppStore = create<Store>((set, get) => ({
             return list;
         });
         set({ lists: updatedItems });
+    },
+    
+    // 从数据服务加载数据
+    initializeData: async (dataService?: DataService) => {
+        try {
+            // 保存数据服务实例
+            if (dataService) {
+                dataServiceInstance = dataService;
+            }
+            
+            // 如果没有提供数据服务实例，使用之前保存的实例
+            const service = dataServiceInstance;
+            if (!service) {
+                console.error('No data service instance available');
+                return;
+            }
+            
+            // 并行加载所有数据
+            const [listsData, homeItemsData, notificationsData] = await Promise.all([
+                service.getLists(),
+                service.getHomeItems(),
+                service.getNotifications()
+            ]);
+            
+            // 更新状态
+            if (listsData && listsData.length > 0) {
+                set({ lists: listsData });
+            }
+            
+            if (homeItemsData && homeItemsData.length > 0) {
+                set({ homeItems: homeItemsData });
+            }
+            
+            if (notificationsData && notificationsData.length > 0) {
+                set({ notifications: notificationsData });
+            }
+        } catch (error) {
+            console.error('Failed to initialize data from service:', error);
+        }
     },
 
 }));

@@ -8,12 +8,13 @@
     "build:dev": "next build --no-lint",
     "start": "next start  --experimental-https",
     "lint": "next lint",
-    "start:android": "npm run build:dev && npx cap sync && npx cap run android",
-    "start:ios": "npm run build:dev && npx cap sync && npx cap run ios",
-    "open:android": "npm run build && npx cap sync && npx cap copy android && npx cap open android",
-    "open:ios": "npm run build && npx cap sync && npx cap copy ios && npx cap open ios"
+    "start:android": "bun run build:dev && npx cap sync && npx cap run android",
+    "start:ios": "bun run build:dev && npx cap sync && npx cap run ios",
+    "open:android": "bun run build && npx cap sync && npx cap copy android && npx cap open android",
+    "open:ios": "bun run build && npx cap sync && npx cap copy ios && npx cap open ios"
   },
   "dependencies": {
+    "@capacitor-community/bluetooth-le": "^3.0.0",
     "@capacitor/android": "^5.7.0",
     "@capacitor/core": "^5.7.0",
     "@capacitor/ios": "^5.7.0",
@@ -21,10 +22,12 @@
     "@ionic/react": "^7.7.1",
     "@ionic/react-router": "^7.7.1",
     "clsx": "^2.1.0",
+    "idb": "^7.1.1",
     "next": "14.1.0",
     "react": "^18",
     "react-dom": "^18",
     "tailwind-merge": "^2.2.1",
+    "uuid": "^9.0.1",
     "zustand": "^4.5.0"
   },
   "devDependencies": {
